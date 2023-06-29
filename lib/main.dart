@@ -1,6 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_app_test/answer.dart';
 
 void main() => runApp(MyApp());
+
+const questions = [
+  {
+    "questionText": "Dart хэлийг анх хэзээ олон нийтэд танилцуулсан вэ?",
+    "answer": ["2010", "2011", "2012", "2013", "2014"]
+  },
+  {
+    "questionText": "Flutter-н 1.0 хувилбар хэзээ гарсан вэ?",
+    "answer": [
+      "2015 оны 10 сар",
+      "2016 оны 03 сар",
+      "2017 оны 05 сар",
+      "2018 оны 12 сар",
+      "2019 оны 04 сар"
+    ],
+  }
+];
 
 // ignore: use_key_in_widget_constructors
 class MyApp extends StatefulWidget {
@@ -9,7 +27,16 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  void questionAnswer() {}
+  int questionIndex = 0;
+  void questionAnswer() {
+    setState(() {
+      if (questionIndex < questions.length - 1) {
+        questionIndex += 1;
+      }
+      // else {questionIndex = 0;}
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -33,60 +60,14 @@ class _MyAppState extends State<MyApp> {
               margin: const EdgeInsets.all(10),
               padding: const EdgeInsets.all(10),
               width: double.infinity,
-              child: const Text(
-                'Flutter-н 1.0 хувилбар хэзээ гарсан вэ?',
-                style: TextStyle(fontSize: 20),
+              child: Text(
+                questions[questionIndex]["questionText"].toString(),
+                style: const TextStyle(fontSize: 20),
                 textAlign: TextAlign.center,
               ),
             ),
-            Container(
-              width: double.infinity,
-              margin: const EdgeInsets.only(left: 10, right: 10),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueAccent,
-                    foregroundColor: Colors.white,
-                    textStyle: const TextStyle(fontSize: 16)),
-                onPressed: questionAnswer,
-                child: const Text('2015 оны 10 сар'),
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              margin: const EdgeInsets.only(left: 10, right: 10),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueAccent,
-                    foregroundColor: Colors.white,
-                    textStyle: const TextStyle(fontSize: 16)),
-                onPressed: questionAnswer,
-                child: const Text('2016 оны 03 сар'),
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              margin: const EdgeInsets.only(left: 10, right: 10),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueAccent,
-                    foregroundColor: Colors.white,
-                    textStyle: const TextStyle(fontSize: 16)),
-                onPressed: questionAnswer,
-                child: const Text('2017 оны 05 сар'),
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              margin: const EdgeInsets.only(left: 10, right: 10),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueAccent,
-                    foregroundColor: Colors.white,
-                    textStyle: const TextStyle(fontSize: 16)),
-                onPressed: questionAnswer,
-                child: const Text('2018 оны 12 сар'),
-              ),
-            ),
+            for (String answer in questions[questionIndex]["answer"] as List)
+              Answer(questionAnswer, answer.toString()),
           ],
         ),
       ),
