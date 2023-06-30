@@ -1,23 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:quiz_app_test/answer.dart';
+import 'package:quiz_app_test/quiz.dart';
+import 'package:quiz_app_test/result.dart';
 
 void main() => runApp(MyApp());
 
 const questions = [
   {
     "questionText": "Dart хэлийг анх хэзээ олон нийтэд танилцуулсан вэ?",
-    "answer": ["2010", "2011", "2012", "2013", "2014"]
+    "answer": [
+      {"text": "2010", "score": 0},
+      {"text": "2011", "score": 1},
+      {"text": "2012", "score": 0},
+      {"text": "2013", "score": 0},
+      {"text": "2014", "score": 0},
+    ]
   },
   {
     "questionText": "Flutter-н 1.0 хувилбар хэзээ гарсан вэ?",
     "answer": [
-      "2015 оны 10 сар",
-      "2016 оны 03 сар",
-      "2017 оны 05 сар",
-      "2018 оны 12 сар",
-      "2019 оны 04 сар"
+      {"text": "2015 оны 10 сар", "score": 0},
+      {"text": "2016 оны 03 сар", "score": 0},
+      {"text": "2017 оны 05 сар", "score": 0},
+      {"text": "2018 оны 12 сар", "score": 1},
+      {"text": "2019 оны 04 сар", "score": 0},
     ],
-  }
+  },
+  {
+    "questionText": "Flutter гэж юу вэ?",
+    "answer": [
+      {"text": "Программчлалын хэл", "score": 0},
+      {"text": "Нээлттэй эхийн framework", "score": 1},
+      {"text": "UI/UX хэрэгсэл", "score": 0},
+      {"text": "Үйлдлийн систем", "score": 0},
+    ],
+  },
+  {
+    "questionText": "Flutter-г ямар компани хөгжүүлсэн вэ?",
+    "answer": [
+      {"text": "Microsoft", "score": 0},
+      {"text": "Facebook", "score": 0},
+      {"text": "Amazon", "score": 0},
+      {"text": "Google", "score": 1},
+    ],
+  },
 ];
 
 // ignore: use_key_in_widget_constructors
@@ -28,12 +53,18 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int questionIndex = 0;
-  void questionAnswer() {
+  int totalScore = 0;
+  void questionAnswer(int score) {
+    totalScore += score;
     setState(() {
-      if (questionIndex < questions.length - 1) {
-        questionIndex += 1;
-      }
-      // else {questionIndex = 0;}
+      questionIndex += 1;
+    });
+  }
+
+  void resetQuiz() {
+    setState(() {
+      questionIndex = 0;
+      totalScore = 0;
     });
   }
 
@@ -44,32 +75,9 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text("Quiz App"),
         ),
-        body: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.only(right: 15, top: 15),
-              width: double.infinity,
-              child: const Text(
-                "Асуулт 1/4",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                textAlign: TextAlign.right,
-              ),
-            ),
-            Container(
-              color: Colors.lightBlueAccent,
-              margin: const EdgeInsets.all(10),
-              padding: const EdgeInsets.all(10),
-              width: double.infinity,
-              child: Text(
-                questions[questionIndex]["questionText"].toString(),
-                style: const TextStyle(fontSize: 20),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            for (String answer in questions[questionIndex]["answer"] as List)
-              Answer(questionAnswer, answer.toString()),
-          ],
-        ),
+        body: questionIndex < questions.length
+            ? Quiz(questions, questionIndex, questionAnswer)
+            : Result(totalScore, resetQuiz),
       ),
     );
   }
